@@ -10,43 +10,38 @@ function App() {
 
   useEffect(() => {
     // if (quoteList === null) {
-      const fetchData = async () => {
-        const api_url = "https://go-quote.azurewebsites.net/quotes?page=1&page_size=20&format=json";
-        try {
-          const response = await fetch(api_url);
-          const data = await response.json();
-          console.log('dataaa', data.quotes);
-          setQuoteList(data.quotes);
-        } catch (err) {
-          console.log(err);
-          setQuoteList(null);
-        }
-      };
-      fetchData();
-     
+    const fetchData = async () => {
+      const api_url =
+        "https://go-quote.azurewebsites.net/quotes?page=3&page_size=30&format=json";
+      try {
+        const response = await fetch(api_url);
+        const data = await response.json();
+        setQuoteList(data.quotes);
+      } catch (err) {
+        console.log(err);
+        setQuoteList(null);
+      }
+    };
+    fetchData();
+
     // }
   }, []);
 
   const [count, setCount] = useState(0);
 
-  const [selectedQuote, setSelectedQuote] = useState();
+  const [selectedQuote, setSelectedQuote] = useState(null);
   const randomClick = () => {
-    setSelectedQuote(
-      inspirationalQuotes[
-        Math.floor(Math.random() * inspirationalQuotes.length)
-      ]
-    );
+    setSelectedQuote(quoteList[Math.floor(Math.random() * quoteList.length)]);
   };
   return (
     <>
-      {/* <div>
-        {inspirationalQuotes.map((quote) => (
-          <div>{quote}</div>
-        ))}
-      </div> */}
-      <button>New Quote</button>
-      {/* <button onClick={randomClick}>New Quote</button> */}
-      <div>{selectedQuote}</div>
+      <button onClick={randomClick}>New Quote</button>
+      {selectedQuote && (
+        <div>
+          <div>{selectedQuote?.text}</div>
+          <div>- {selectedQuote?.author}</div>
+        </div>
+      )}
     </>
   );
 }
