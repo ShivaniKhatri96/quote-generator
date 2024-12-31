@@ -1,12 +1,10 @@
-// import inspirationalQuotes from "./assets/quotes.js";
-
 import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 
 function App() {
   const [quoteList, setQuoteList] = useState(null);
+  const [selectedQuote, setSelectedQuote] = useState(null);
 
   useEffect(() => {
     // if (quoteList === null) {
@@ -23,13 +21,9 @@ function App() {
       }
     };
     fetchData();
-
     // }
   }, []);
 
-  const [count, setCount] = useState(0);
-
-  const [selectedQuote, setSelectedQuote] = useState(null);
   const randomClick = () => {
     setSelectedQuote(quoteList[Math.floor(Math.random() * quoteList.length)]);
   };
