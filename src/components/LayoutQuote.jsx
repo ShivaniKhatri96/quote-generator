@@ -18,7 +18,9 @@ const LayoutQuote = ({ quote, favoriteIds, setFavoriteIds }) => {
     <div>
       <div>{quote?.text}</div>
       <div>- {quote?.author}</div>
-      <button onClick={() => saveFavorites(quote.id)}>Fav</button>
+      <button onClick={() => saveFavorites(quote.id)}>
+        {favoriteIds.includes(quote.id) ? "❤️" : "♡"}
+      </button>
     </div>
   );
 };

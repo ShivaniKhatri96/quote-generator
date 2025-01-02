@@ -68,6 +68,10 @@ function App() {
     }
   }, [selectedQuote]);
 
+  // filtering favorite quotes
+  const favoriteQuotes = quoteList?.filter((quote) =>
+    favoriteIds.includes(quote.id)
+  );
   return (
     <>
       <button onClick={randomClick}>New Quote</button>
@@ -77,6 +81,19 @@ function App() {
           favoriteIds={favoriteIds}
           setFavoriteIds={setFavoriteIds}
         />
+      )}
+      {favoriteQuotes?.length > 0 && (
+        <div>
+          <div>Favorites</div>
+          {favoriteQuotes?.map((quote) => (
+            <LayoutQuote
+              quote={quote}
+              key={quote.id}
+              favoriteIds={favoriteIds}
+              setFavoriteIds={setFavoriteIds}
+            />
+          ))}
+        </div>
       )}
       {historyQuotes?.length > 0 && (
         <div>
