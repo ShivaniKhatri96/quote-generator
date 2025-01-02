@@ -26,10 +26,18 @@ function App() {
     //we check if window is defined (indicating that the code is running in the browser environment)
     if (typeof window !== "undefined") {
       const cachedQuoteList = localStorage?.getItem("cachedQuoteList");
+      const cachedFavoriteIds = localStorage?.getItem("cachedFavoriteIds");
+
+      // Retrieve and set the quote list
       if (cachedQuoteList) {
         setQuoteList(JSON.parse(cachedQuoteList));
       } else {
         fetchData();
+      }
+
+      //Retrieve and set the favorite IDs
+      if (cachedFavoriteIds) {
+        setFavoriteIds(JSON.parse(cachedFavoriteIds));
       }
     }
   }, []);

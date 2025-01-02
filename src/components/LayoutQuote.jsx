@@ -2,16 +2,16 @@ import React from "react";
 
 const LayoutQuote = ({ quote, favoriteIds, setFavoriteIds }) => {
   const saveFavorites = (id) => {
-    // true or false depending on the condition
-    const isIdFound = favoriteIds.some((favoriteId) => favoriteId === id);
-    if (isIdFound) {
-      // removing the id if it already exists
-      const updatedList = favoriteIds.filter((favoriteId) => favoriteId !== id);
-      setFavoriteIds(updatedList);
-    } else {
-      // adding the id
-      setFavoriteIds((prevState) => [...prevState, id]);
-    }
+    setFavoriteIds((prevState) => {
+      // if the id already exists in the state, we remove it otherwise we add it
+      const updatedList = prevState.includes(id)
+        ? prevState.filter((favoriteId) => favoriteId !== id)
+        : [...prevState, id];
+
+      // Saving to local storage
+      localStorage.setItem("cachedFavoriteIds", JSON.stringify(updatedList));
+      return updatedList;
+    });
   };
   console.log("favoriteIds", favoriteIds);
   return (
