@@ -7,7 +7,7 @@ function App() {
   const [selectedQuote, setSelectedQuote] = useState(null);
   const [historyQuotes, setHistoryQuotes] = useState([]);
   const [isHistoryShown, setIsHistoryShown] = useState(false);
-
+  const [favoriteIds, setFavoriteIds] = useState([]);
   const fetchData = async () => {
     const api_url =
       "https://go-quote.azurewebsites.net/quotes?page=3&page_size=30&format=json";
@@ -52,7 +52,13 @@ function App() {
   return (
     <>
       <button onClick={randomClick}>New Quote</button>
-      {selectedQuote && <LayoutQuote quote={selectedQuote} />}
+      {selectedQuote && (
+        <LayoutQuote
+          quote={selectedQuote}
+          favoriteIds={favoriteIds}
+          setFavoriteIds={setFavoriteIds}
+        />
+      )}
       {historyQuotes?.length > 0 && (
         <div>
           <button onClick={() => setIsHistoryShown(!isHistoryShown)}>
@@ -61,7 +67,12 @@ function App() {
           {isHistoryShown && (
             <div>
               {historyQuotes?.map((quote) => (
-                <LayoutQuote quote={quote} key={quote.author} />
+                <LayoutQuote
+                  quote={quote}
+                  key={quote.id}
+                  favoriteIds={favoriteIds}
+                  setFavoriteIds={setFavoriteIds}
+                />
               ))}
             </div>
           )}
