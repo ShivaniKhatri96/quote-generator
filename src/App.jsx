@@ -27,7 +27,7 @@ function App() {
     if (typeof window !== "undefined") {
       const cachedQuoteList = localStorage?.getItem("cachedQuoteList");
       const cachedFavoriteIds = localStorage?.getItem("cachedFavoriteIds");
-
+      const cachedHistoryQuotes = localStorage.getItem("cachedHistoryQuotes");
       // Retrieve and set the quote list
       if (cachedQuoteList) {
         setQuoteList(JSON.parse(cachedQuoteList));
@@ -38,6 +38,11 @@ function App() {
       //Retrieve and set the favorite IDs
       if (cachedFavoriteIds) {
         setFavoriteIds(JSON.parse(cachedFavoriteIds));
+      }
+
+      //Retrieve and set the quotes history
+      if (cachedHistoryQuotes) {
+        setHistoryQuotes(JSON.parse(cachedHistoryQuotes));
       }
     }
   }, []);
@@ -52,6 +57,12 @@ function App() {
         const updatedQuotes = [selectedQuote, ...prevState];
         //making sure duplicates are removed from history
         const uniqueQuotes = [...new Set(updatedQuotes)];
+
+        // Saving to local storage
+        localStorage.setItem(
+          "cachedHistoryQuotes",
+          JSON.stringify(uniqueQuotes)
+        );
         return uniqueQuotes;
       });
     }
