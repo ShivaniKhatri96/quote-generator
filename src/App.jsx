@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
 import LayoutQuote from "./components/LayoutQuote";
 
@@ -8,24 +7,32 @@ function App() {
   const [selectedQuote, setSelectedQuote] = useState(null);
   const [historyQuotes, setHistoryQuotes] = useState([]);
   const [isHistoryShown, setIsHistoryShown] = useState(false);
-  useEffect(() => {
-    // if (quoteList === null) {
-    const fetchData = async () => {
-      const api_url =
-        "https://go-quote.azurewebsites.net/quotes?page=3&page_size=30&format=json";
-      try {
-        const response = await fetch(api_url);
-        const data = await response.json();
-        setQuoteList(data.quotes);
-      } catch (err) {
-        console.log(err);
-        setQuoteList(null);
-      }
-    };
-    fetchData();
-    // }
-  }, []);
 
+  const fetchData = async () => {
+    const api_url =
+      "https://go-quote.azurewebsites.net/quotes?page=3&page_size=30&format=json";
+    try {
+      const response = await fetch(api_url);
+      const data = await response.json();
+      setQuoteList(data.quotes);
+      localStorage.setItem("cachedQuoteList", JSON.stringify(data.quotes));
+    } catch (err) {
+      console.log(err);
+      setQuoteList(null);
+    }
+  };
+
+  useEffect(() => {
+    //we check if window is defined (indicating that the code is running in the browser environment)
+    if (typeof window !== "undefined") {
+      const cachedQuoteList = localStorage?.getItem("cachedQuoteList");
+      if (cachedQuoteList) {
+        setQuoteList(JSON.parse(cachedQuoteList));
+      } else {
+        fetchData();
+      }
+    }
+  }, []);
   const randomClick = () => {
     setSelectedQuote(quoteList[Math.floor(Math.random() * quoteList.length)]);
   };
@@ -45,25 +52,21 @@ function App() {
   return (
     <>
       <button onClick={randomClick}>New Quote</button>
-      {selectedQuote && (
-        <LayoutQuote quote={selectedQuote} />
+      {selectedQuote && <LayoutQuote quote={selectedQuote} />}
+      {historyQuotes?.length > 0 && (
+        <div>
+          <button onClick={() => setIsHistoryShown(!isHistoryShown)}>
+            History quotes
+          </button>
+          {isHistoryShown && (
+            <div>
+              {historyQuotes?.map((quote) => (
+                <LayoutQuote quote={quote} key={quote.author} />
+              ))}
+            </div>
+          )}
+        </div>
       )}
-      <div>
-        {historyQuotes?.length > 0 && (
-          <>
-            <button onClick={() => setIsHistoryShown(!isHistoryShown)}>
-              History quotes
-            </button>
-            {isHistoryShown && (
-              <div>
-                {historyQuotes?.map((quote) => (
-                  <LayoutQuote quote={quote} />
-                ))}
-              </div>
-            )}
-          </>
-        )}
-      </div>
     </>
   );
 }

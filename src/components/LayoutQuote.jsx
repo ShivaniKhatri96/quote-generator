@@ -5,6 +5,7 @@ const LayoutQuote = ({quote}) => {
     <div>
     <div>{quote?.text}</div>
     <div>- {quote?.author}</div>
+    <button>Fav</button>
   </div>
   )
 }
