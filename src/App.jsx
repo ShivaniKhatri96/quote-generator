@@ -5,7 +5,8 @@ import "./App.css";
 function App() {
   const [quoteList, setQuoteList] = useState(null);
   const [selectedQuote, setSelectedQuote] = useState(null);
-
+  const [historyQuotes, setHistoryQuotes] = useState([]);
+  const [isHistoryShown, setIsHistoryShown] = useState(false);
   useEffect(() => {
     // if (quoteList === null) {
     const fetchData = async () => {
@@ -27,6 +28,19 @@ function App() {
   const randomClick = () => {
     setSelectedQuote(quoteList[Math.floor(Math.random() * quoteList.length)]);
   };
+
+  useEffect(() => {
+    if (selectedQuote !== null) {
+      setHistoryQuotes((prevState) => {
+        //making sure the newly added quote stays on top of the list
+        const updatedQuotes = [selectedQuote, ...prevState];
+        //making sure duplicates are removed from history
+        const uniqueQuotes = [...new Set(updatedQuotes)];
+        return uniqueQuotes;
+      });
+    }
+  }, [selectedQuote]);
+
   return (
     <>
       <button onClick={randomClick}>New Quote</button>
@@ -36,6 +50,25 @@ function App() {
           <div>- {selectedQuote?.author}</div>
         </div>
       )}
+      <div>
+        {historyQuotes?.length > 0 && (
+          <>
+            <button onClick={() => setIsHistoryShown(!isHistoryShown)}>
+              History quotes
+            </button>
+            {isHistoryShown && (
+              <div>
+                {historyQuotes?.map((quote) => (
+                  <>
+                    <div>{quote.text}</div>
+                    <div>{quote.author}</div>
+                  </>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 }
