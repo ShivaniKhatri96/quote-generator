@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
+import LayoutQuote from "./components/LayoutQuote";
 
 function App() {
   const [quoteList, setQuoteList] = useState(null);
@@ -45,10 +46,7 @@ function App() {
     <>
       <button onClick={randomClick}>New Quote</button>
       {selectedQuote && (
-        <div>
-          <div>{selectedQuote?.text}</div>
-          <div>- {selectedQuote?.author}</div>
-        </div>
+        <LayoutQuote quote={selectedQuote} />
       )}
       <div>
         {historyQuotes?.length > 0 && (
@@ -59,10 +57,7 @@ function App() {
             {isHistoryShown && (
               <div>
                 {historyQuotes?.map((quote) => (
-                  <>
-                    <div>{quote.text}</div>
-                    <div>{quote.author}</div>
-                  </>
+                  <LayoutQuote quote={quote} />
                 ))}
               </div>
             )}
